@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Brawn Welcome</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Calibri, Arial;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+background:transparent;
+color:white;
+}
+
+/* stars */
+
+body:before{
+content:'';
+position:absolute;
+width:100%;
+height:100%;
+background-image:radial-gradient(white 1px, transparent 1px);
+background-size:35px 35px;
+opacity:0.4;
+}
+
+/* decorative Diwali lights */
+
+.lights{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:space-around;
+z-index:5;
+}
+
+.bulb{
+width:12px;
+height:18px;
+border-radius:50%;
+background:red;
+animation:blink 1.5s infinite alternate;
+box-shadow:0 0 15px red;
+}
+
+.bulb:nth-child(2){background:yellow;box-shadow:0 0 15px yellow}
+.bulb:nth-child(3){background:lime;box-shadow:0 0 15px lime}
+.bulb:nth-child(4){background:cyan;box-shadow:0 0 15px cyan}
+.bulb:nth-child(5){background:orange;box-shadow:0 0 15px orange}
+.bulb:nth-child(6){background:pink;box-shadow:0 0 15px pink}
+
+@keyframes blink{
+
+0%{opacity:0.4}
+100%{opacity:1}
+
+}
+
+/* fireworks canvas */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:1;
+}
+
+/* welcome container */
+
+.container{
+position:relative;
+z-index:10;
+max-width:900px;
+text-align:center;
+padding:20px;
+}
+
+/* company title */
+
+.company{
+color:#4da6ff;
+font-weight:bold;
+font-style:italic;
+font-size:46px;
+}
+
+/* tagline */
+
+.tag{
+color:red;
+font-style:italic;
+margin-bottom:20px;
+}
+
+/* blue highlight */
+
+.blue{
+color:#4da6ff;
+font-weight:bold;
+font-style:italic;
+}
+
+p{
+font-size:18px;
+line-height:1.7;
+}
+
+h2{
+font-size:26px;
+}
+
+/* rockets */
+
+.rocket{
+position:absolute;
+bottom:-50px;
+width:4px;
+height:40px;
+background:white;
+animation:launch 4s linear infinite;
+}
+
+@keyframes launch{
+
+0%{bottom:-50px}
+80%{bottom:80vh}
+100%{bottom:80vh}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Diwali lights -->
+
+<div class="lights">
+<div class="bulb"></div>
+<div class="bulb"></div>
+<div class="bulb"></div>
+<div class="bulb"></div>
+<div class="bulb"></div>
+<div class="bulb"></div>
+<div class="bulb"></div>
+<div class="bulb"></div>
+<div class="bulb"></div>
+<div class="bulb"></div>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<!-- rockets -->
+
+<div class="rocket" style="left:10%"></div>
+<div class="rocket" style="left:25%"></div>
+<div class="rocket" style="left:40%"></div>
+<div class="rocket" style="left:55%"></div>
+<div class="rocket" style="left:70%"></div>
+<div class="rocket" style="left:85%"></div>
+
+<div class="container">
+
+<div class="company">
+Brawn<br>
+Group of Companies
+</div>
+
+<div class="tag">for better life..</div>
+
+<h2>Welcome to the <span class="blue">Brawn Family</span></h2>
+
+<p>
+Greetings from <span class="blue">Brawn Group of Companies</span>.
+Thank you for submitting your application form. We are pleased to confirm that your form has been successfully received.
+</p>
+
+<p>
+We truly appreciate your interest in becoming a part of the
+<span class="blue">Brawn Family</span>. Our team will carefully review your application and will contact you should any additional information be required.
+</p>
+
+<p>
+Thank you once again for considering
+<span class="blue">Brawn Group of Companies</span>
+as a place to grow your career. We wish you every success in your professional journey.
+</p>
+
+<p>
+Warm regards,<br>
+Human Resources Department<br>
+<span class="blue">Brawn Group of Companies</span>
+</p>
+
+</div>
+
+<script>
+
+/* fireworks */
+
+const canvas=document.getElementById("fireworks")
+const ctx=canvas.getContext("2d")
+
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+let particles=[]
+
+function firework(){
+
+let x=Math.random()*canvas.width
+let y=Math.random()*canvas.height/2
+
+for(let i=0;i<120;i++){
+
+particles.push({
+
+x:x,
+y:y,
+angle:Math.random()*2*Math.PI,
+speed:Math.random()*6+2,
+life:120
+
+})
+
+}
+
+}
+
+function animate(){
+
+requestAnimationFrame(animate)
+
+ctx.fillStyle="rgba(0,0,0,0.2)"
+ctx.fillRect(0,0,canvas.width,canvas.height)
+
+particles.forEach((p,i)=>{
+
+p.x+=Math.cos(p.angle)*p.speed
+p.y+=Math.sin(p.angle)*p.speed
+p.life--
+
+ctx.beginPath()
+ctx.arc(p.x,p.y,2,0,Math.PI*2)
+ctx.fillStyle="hsl("+Math.random()*360+",100%,60%)"
+ctx.fill()
+
+if(p.life<=0)particles.splice(i,1)
+
+})
+
+}
+
+setInterval(firework,700)
+
+animate()
+
+/* confetti */
+
+setInterval(()=>{
+
+confetti({
+
+particleCount:120,
+spread:120,
+origin:{y:0.6}
+
+})
+
+},2500)
+
+</script>
+
+</body>
+</html>
